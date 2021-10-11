@@ -3,12 +3,14 @@ package com.example.Service;
 import com.example.database.Student;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface StudentService {
-    void saveStudent(Student theStudent);
+    Student saveStudent(Student theStudent);
 
     List<Student> getAllStudents();
 
-    Student getStudent(Long id);
+    Optional<Student> getStudent(Long id);
 
+    void deleteStudent(Long id);
 }

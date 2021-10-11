@@ -18,11 +18,12 @@ import java.util.List;
 public class TeacherController {
 
  private final TeacherService teacherService ;
+ private final StudentService studentService ;
 
-    public TeacherController(TeacherService teacherService) {
+    public TeacherController(TeacherService teacherService, StudentService studentService) {
         this.teacherService = teacherService;
+        this.studentService = studentService;
     }
-
 
     @GetMapping("/all")
     public ResponseEntity< List<Teacher>> getAllTeachers(){
@@ -44,6 +45,9 @@ public class TeacherController {
     public ResponseEntity<Teacher> addTeacher(@RequestBody Teacher newTeacher){
 
         Teacher saveTeacher = teacherService.saveTeacher(newTeacher);
+        Student student = teacherService.getStudentByTeacher(saveTeacher);
+        student.setTeacher(saveTeacher);
+        studentService.saveStudent(student);
 
 
         return new ResponseEntity<>(saveTeacher, HttpStatus.CREATED) ;

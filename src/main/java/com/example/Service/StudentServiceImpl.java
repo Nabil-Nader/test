@@ -7,6 +7,7 @@ import com.example.database.Student;
  import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class StudentServiceImpl implements  StudentService {
@@ -18,8 +19,8 @@ public class StudentServiceImpl implements  StudentService {
     }
 
     @Override
-    public void saveStudent(Student theStudent) {
-        studentRepository.save(theStudent);
+    public Student saveStudent(Student theStudent) {
+       return studentRepository.save(theStudent);
 
     }
 
@@ -29,14 +30,18 @@ public class StudentServiceImpl implements  StudentService {
     }
 
     @Override
-    public Student getStudent(Long id) {
-        return studentRepository.findById(id)
-                .orElseThrow(()-> new UserNotFoundException("Student by Id"+id+
-                        " not found"));
+    public Optional<Student> getStudent(Long id) {
+        return studentRepository.findById(id);
+
     }
 
     public List<Student> getStudentByTeacher(Long id){
         return studentRepository.findByTeacherId(id);
+    }
+
+    @Override
+    public void deleteStudent(Long id) {
+        studentRepository.deleteById(id);
     }
 }
 
