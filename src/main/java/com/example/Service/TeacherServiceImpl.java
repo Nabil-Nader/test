@@ -12,11 +12,9 @@ import java.util.List;
 public class TeacherServiceImpl implements TeacherService {
 
     private final TeacherRepository teacherRepository ;
-    private  final StudentServiceImpl studentService ;
 
     public TeacherServiceImpl(TeacherRepository teacherRepository, StudentServiceImpl studentService) {
         this.teacherRepository = teacherRepository;
-        this.studentService = studentService;
     }
 
     @Override
@@ -26,18 +24,9 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     public Teacher saveTeacher(Teacher theTeacher) {
+    	
       Teacher t = teacherRepository.save(theTeacher);
-      Long id = t.getId();
-        System.out.println(id);
-
-        Student s = new Student();
-        s = getStudentByTeacher(t);
-
-        System.out.println(s);
-
-        studentService.saveStudent(s);
-
-        return t;
+      return t;
     }
 
     @Override
@@ -47,7 +36,6 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     public List<Teacher> getAllTeacher() {
-
         return teacherRepository.findAll();
     }
 

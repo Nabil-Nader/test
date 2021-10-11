@@ -1,33 +1,64 @@
 package com.example.database;
 
-import lombok.*;
+import java.io.Serializable;
 
 import javax.persistence.*;
-import java.util.List;
+import javax.xml.bind.annotation.XmlTransient;
 
-@Entity(name="student")
-@AllArgsConstructor @NoArgsConstructor
-@Getter @Setter @ToString
-public class Student {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @Column
-    private String name;
-    @Column
-    private String jobTitle;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
-    /**
-     * We  did a relationship between 2 DB
-     * Many student have one teacher
-     */
-    @ManyToOne( cascade = {CascadeType.PERSIST,CascadeType.MERGE,
-                           CascadeType.DETACH,CascadeType.REFRESH}
-              )
+@Entity(name = "student")
+public class Student implements Serializable {
 
-    @JoinColumn(name="teacher_id")
-    private Teacher teacher ;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7850506142772815515L;
 
+	@Id
+	@Column
+	@GeneratedValue
+	private Long id;
 
+	@Column(name = "name")
+	private String name;
 
+	@Column(name = "jobTitle")
+	private String jobTitle;
+
+	@Column(name = "teacher_id")
+	@JsonIgnore
+	private Long teacher_id;
+
+	public Long getId() {
+		return id;
+	}
+
+	public Long getTeacher_id() {
+		return teacher_id;
+	}
+
+	public void setTeacher_id(Long teacher_id) {
+		this.teacher_id = teacher_id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getJobTitle() {
+		return jobTitle;
+	}
+
+	public void setJobTitle(String jobTitle) {
+		this.jobTitle = jobTitle;
+	}
 }

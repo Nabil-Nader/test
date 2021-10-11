@@ -1,10 +1,7 @@
 package com.example.controller;
 
 import com.example.Exception.UserNotFoundException;
-import com.example.Service.StudentService;
-import com.example.Service.StudentServiceImpl;
 import com.example.Service.TeacherService;
-import com.example.Service.TeacherServiceImpl;
 import com.example.database.Student;
 import com.example.database.Teacher;
 import org.springframework.http.HttpStatus;
@@ -12,17 +9,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping(path = "api/v2/teachers")
 public class TeacherController {
 
  private final TeacherService teacherService ;
- private final StudentService studentService ;
 
-    public TeacherController(TeacherService teacherService, StudentService studentService) {
+    public TeacherController(TeacherService teacherService) {
         this.teacherService = teacherService;
-        this.studentService = studentService;
     }
 
     @GetMapping("/all")
@@ -45,10 +41,6 @@ public class TeacherController {
     public ResponseEntity<Teacher> addTeacher(@RequestBody Teacher newTeacher){
 
         Teacher saveTeacher = teacherService.saveTeacher(newTeacher);
-        Student student = teacherService.getStudentByTeacher(saveTeacher);
-        student.setTeacher(saveTeacher);
-        studentService.saveStudent(student);
-
 
         return new ResponseEntity<>(saveTeacher, HttpStatus.CREATED) ;
     }
@@ -71,10 +63,11 @@ public class TeacherController {
 //        return new ResponseEntity<>(HttpStatus.OK);
 //    }
 //
-    @GetMapping("/student/{id}")
-    public ResponseEntity<List<Student>> showTeacherStudents(@PathVariable("id") Long id){
-        Teacher theTeacher = teacherService.getTeacherById(id);
-        List<Student> students = theTeacher.getStudents();
+    @GetMapping("/{id}/allStudents")
+    public ResponseEntity<Set<Student>> showTeacherStudents(@PathVariable("id") Long id){
+    	
+        Teacher teacher = teacherService.getTeacherById(id);
+        Set<Student> students = teacher.getStudents();
 
         return new ResponseEntity<>(students,HttpStatus.OK);
     }

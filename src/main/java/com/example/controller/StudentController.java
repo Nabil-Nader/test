@@ -2,9 +2,7 @@ package com.example.controller;
 
 import com.example.Exception.UserNotFoundException;
 import com.example.Service.StudentService;
-import com.example.Service.TeacherService;
 import com.example.database.Student;
-import com.example.database.Teacher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,15 +16,7 @@ import java.util.Optional;
 public class StudentController {
 
     @Autowired
-    private final StudentService studentService ;
-
-    @Autowired
-    private final TeacherService teacherService ;
-
-    public StudentController(StudentService studentService, TeacherService teacherService) {
-        this.studentService = studentService;
-        this.teacherService = teacherService;
-    }
+    private StudentService studentService ;
 
     @GetMapping("/all")
     public ResponseEntity< List<Student>> getAllStudents(){
@@ -40,21 +30,10 @@ public class StudentController {
 
         if (theStudent.isPresent()){
             return ResponseEntity.unprocessableEntity().build();
-
-
-        }
-        return null;
-
-//        return new ResponseEntity<>(theStudent, HttpStatus.OK) ;
+        } else {
+        	 return new ResponseEntity<>(HttpStatus.NOT_FOUND) ;
+        }     
     }
-
-//    @GetMapping("find/student/teacher/{id}")
-//    public ResponseEntity<List<Student>> getStudentTeacher(@PathVariable("id")
-//                                                                       Long id){
-//        Teacher teacher = teacherService.getTeacherById(id);
-//        Student s = teacherService.
-//        return new ResponseEntity<>(allStudent,HttpStatus.OK);
-//    }
 
     @PostMapping("/add")
     public ResponseEntity<Student> addStudent(@RequestBody Student newStudent){
@@ -79,10 +58,4 @@ public class StudentController {
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
-
-
-
-
-
 }

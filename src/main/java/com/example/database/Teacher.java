@@ -1,44 +1,67 @@
 package com.example.database;
 
-import lombok.*;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import javax.xml.bind.annotation.XmlTransient;
 
-@Entity(name="teacher")
-@AllArgsConstructor @NoArgsConstructor
-@Getter @Setter @ToString
-public class Teacher {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
-    private String Name;
+import java.io.Serializable;
+import java.util.Set;
 
-    private String jobTitle;
+@Entity(name = "teacher")
+public class Teacher implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8375900931064146724L;
 
-   @OneToMany(mappedBy = "teacher",
-        cascade = {CascadeType.PERSIST,CascadeType.MERGE,
-                   CascadeType.DETACH,CascadeType.REFRESH}
-    )
-    private List<Student> students ;
+	@Id
+	@Column
+	@GeneratedValue
+	private Long id;
 
-    /**
-     * Method : two way link between the teacher and student
-     * @param tempStudent
-     */
+	@Column(name="name")
+	private String name;
 
-    public void add(Student tempStudent){
+	@Column(name="jobTitle")
+	private String jobTitle;
 
-        if(students == null){
-            students = new ArrayList<>();
-        }
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinColumn(name = "teacher_id")
+	private Set<Student> students;
 
-        students.add(tempStudent);
-        tempStudent.setTeacher(this);
+	public Long getId() {
+		return id;
+	}
 
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getJobTitle() {
+		return jobTitle;
+	}
+
+	public void setJobTitle(String jobTitle) {
+		this.jobTitle = jobTitle;
+	}
+
+	public Set<Student> getStudents() {
+		return students;
+	}
+
+	public void setStudents(Set<Student> students) {
+		this.students = students;
+	}
 
 }
